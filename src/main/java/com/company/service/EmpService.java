@@ -1,6 +1,6 @@
 package com.company.service;
 
-import com.company.pojo.PageBean;
+import com.company.pojo.entity.PageBean;
 
 import java.time.LocalDate;
 import java.util.List;

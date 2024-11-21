@@ -1,0 +1,36 @@
+package com.company.controller;
+
+
+import com.company.pojo.entity.Inventory;
+import com.company.pojo.entity.Result;
+import com.company.service.InventoryService;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@Slf4j
+@RequestMapping("/inventory")
+@RestController
+public class InventoryController {
+
+    @Autowired
+    private InventoryService inventoryService;
+
+    /**
+     * 查询所有库存信息
+     * @return
+     */
+    @GetMapping("/search")
+    public Result list(){
+        log.info("开始查询所有库存信息");
+        List<Inventory> inventoryList = inventoryService.list();
+        return Result.success(inventoryList);
+    }
+
+
+}

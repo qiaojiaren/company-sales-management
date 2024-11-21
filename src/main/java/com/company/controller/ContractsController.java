@@ -1,7 +1,7 @@
 package com.company.controller;
 
-import com.company.pojo.Contract;
-import com.company.pojo.Result;
+import com.company.pojo.entity.Contract;
+import com.company.pojo.entity.Result;
 import com.company.service.ContractsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ContractsController {
     //@RequestMapping(value = "/depts",method = RequestMethod.GET) //指定请求方式为GET
     @GetMapping("/search")
     public Result list(){
-        log.info("查询全部部门数据");
+        log.info("查询全部合同数据");
         //调用service查询合同数据
         List<Contract> contractsList = contractsService.list();
         return Result.success(contractsList);

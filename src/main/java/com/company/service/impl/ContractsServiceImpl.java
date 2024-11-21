@@ -2,7 +2,8 @@ package com.company.service.impl;
 
 import com.company.constant.Contract_status;
 import com.company.mapper.ContractsMapper;
-import com.company.pojo.Contract;
+import com.company.mapper.InventoryMapper;
+import com.company.pojo.entity.Contract;
 import com.company.service.ContractsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,26 +17,32 @@ public class ContractsServiceImpl implements ContractsService {
     @Autowired
     private ContractsMapper contractsMapper;
 
-    //todo:自动注入产品表，用于计算合同金额
+    @Autowired
+    private InventoryMapper inventoryMapper;
 
+
+    /**
+     * 查询所有合同
+     * @return
+     */
     @Override
     public List<Contract> list() {
         return contractsMapper.list();
     }
 
+    /**
+     * 创建新的合同
+     * @param contracts
+     */
     @Override
     public void add(Contract contracts) {
 
         Double amount;
-        //todo: amount=contracts.getProductQuantity()*
-        amount= 10.00;
+        amount = 10.0;
+        //todo:结合发货单进行操作
 
-//        contracts.setCustomerId(contracts.getCustomerId());
-//        contracts.setProductId(contracts.getProductId());
-//        contracts.setSalespersonId(contracts.getSalespersonId());
-//        contracts.setProductQuantity(contracts.getProductQuantity());
+
         contracts.setContractAmount(amount);
-//        contracts.setContractContent(contracts.getContractContent());
         contracts.setFulfillmentStatus(Contract_status.CONTRACT_NON_FULFILLMENT);
         contracts.setCreateTime(LocalDateTime.now());
         contracts.setUpdateTime(LocalDateTime.now());

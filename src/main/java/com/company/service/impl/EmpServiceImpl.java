@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.company.mapper.EmpMapper;
 import com.company.pojo.Emp;
-import com.company.pojo.PageBean;
+import com.company.pojo.entity.PageBean;
 import com.company.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

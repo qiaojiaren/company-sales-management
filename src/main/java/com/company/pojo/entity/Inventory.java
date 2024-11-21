@@ -1,6 +1,7 @@
-package com.company.pojo;
+package com.company.pojo.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +11,10 @@ import java.time.LocalDateTime;
  * 库存实体类
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inventory {//todo:先完善产品表，然后再对合同操作进行编写
+public class Inventory {
     private Integer productId;//产品id
     private String productName;//产品名称
     private Integer quantity;//产品库存数量

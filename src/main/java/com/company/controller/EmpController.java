@@ -1,7 +1,7 @@
 package com.company.controller;
 
-import com.company.pojo.PageBean;
-import com.company.pojo.Result;
+import com.company.pojo.entity.PageBean;
+import com.company.pojo.entity.Result;
 import com.company.service.EmpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.company.service;
 
-import com.company.pojo.Contract;
+import com.company.pojo.entity.Contract;
 
 import java.util.List;
 

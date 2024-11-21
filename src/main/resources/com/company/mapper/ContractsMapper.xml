@@ -5,9 +5,9 @@
 <mapper namespace="com.company.mapper.ContractsMapper">
 
     <insert id="insert">
-        insert into contracts ( customer_id, product_id, salesperson_id, product_quantity,contract_amount,
+        insert into contracts ( customer_id, salesperson_id,contract_amount,
                                contract_content, fulfillment_status, create_time, update_time)
-        VALUES(#{customerId},#{productId},#{salespersonId},#{productQuantity},#{contractAmount},
+        VALUES(#{customerId},#{salespersonId},#{contractAmount},
                #{contractContent},#{fulfillmentStatus},#{createTime},#{updateTime})
     </insert>
     <!--批量删除员工 (1, 2, 3)-->

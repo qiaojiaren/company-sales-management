@@ -1,8 +1,7 @@
 package com.company.mapper;
 
-import com.company.pojo.Contract;
+import com.company.pojo.entity.Contract;
 import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
