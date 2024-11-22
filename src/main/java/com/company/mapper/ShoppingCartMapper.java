@@ -45,7 +45,8 @@ public interface ShoppingCartMapper {
     @Delete("delete from shopping_cart where shopping_cart_id = #{id}")
     void deleteById(Integer id);
 
-    @Update("update shopping_cart set product_quantity = #{productQuantity} , sell_price = #{sellPrice} " +
+    @Update("update shopping_cart set product_quantity = #{productQuantity} , sell_price = #{sellPrice}," +
+            "update_time = #{updateTime} " +
             "where shopping_cart_id = #{shoppingCartId}")
     void updateNumberById(ShoppingCart shoppingCart);
 }

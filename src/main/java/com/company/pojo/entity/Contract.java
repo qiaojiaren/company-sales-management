@@ -19,6 +19,7 @@ public class Contract {
     private Integer salespersonId;//销售人员id，和销售人员联系
     private Double contractAmount;//合同金额
     private String contractContent;//合同内容
+    private String description;//描述
     private String fulfillmentStatus;//合同实现状态
     private LocalDateTime createTime; //创建时间
     private LocalDateTime updateTime; //修改时间
