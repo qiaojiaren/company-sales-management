@@ -69,4 +69,18 @@ public class ShoppingCartController {
         shoppingCartService.subShoppingCart(shoppingCartDTO);
         return Result.success();
     }
+
+    /**
+     * 加一购物车里面的一个商品
+     * @param shoppingCartDTO
+     * @return
+     */
+    @PostMapping("/plus")
+    public Result plus(@RequestBody ShoppingCartDTO shoppingCartDTO){
+
+        log.info("购物车商品加一，商品：{}",shoppingCartDTO);
+
+        shoppingCartService.plusShoppingCart(shoppingCartDTO);
+        return Result.success();
+    }
 }

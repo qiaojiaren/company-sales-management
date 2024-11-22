@@ -29,4 +29,10 @@ public interface ShoppingCartService {
      * @param shoppingCartDTO
      */
     void subShoppingCart(ShoppingCartDTO shoppingCartDTO);
+
+    /**
+     * 购物车内容加一
+     * @param shoppingCartDTO
+     */
+    void plusShoppingCart(ShoppingCartDTO shoppingCartDTO);
 }

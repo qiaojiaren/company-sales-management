@@ -93,4 +93,28 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     }
 
+    /**
+     * 购物车内容加一
+     * @param shoppingCartDTO
+     */
+    @Override
+    public void plusShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart = shoppingCartMapper.findById(shoppingCartDTO.getShoppingCartId());
+
+        //计算更改后价格
+        Inventory inventory = inventoryMapper.getById(shoppingCart.getProductId());
+        Double price = inventory.getSellPrice() * (shoppingCart.getProductQuantity() + 1 );
+
+        //设置加一后的数量
+        shoppingCart.setProductQuantity(shoppingCart.getProductQuantity() + 1);
+
+        //补全剩下需要修改的
+        shoppingCart.setSellPrice(price);
+        shoppingCart.setUpdateTime(LocalDateTime.now());
+
+        shoppingCartMapper.updateNumberById(shoppingCart);
+    }
+
 }
