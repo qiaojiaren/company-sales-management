@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Delivery_orders {
+public class DeliveryOrder {
 
     //发货单id
     private Integer deliverOrderId;

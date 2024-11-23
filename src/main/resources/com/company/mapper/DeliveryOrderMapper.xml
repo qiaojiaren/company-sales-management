@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mapper.DeliveryOrderMapper">
+
+    <insert id="insert">
+        insert into delivery_orders (contract_id,product_id,product_info,logistics_info,
+                                     delivery_status,create_time,update_time)
+        values (#{contractId},#{productId},#{productInfo},#{logisticsInfo},
+                #{deliveryStatus},#{createTime},#{updateTime})
+    </insert>
+
+
+
+
+</mapper>

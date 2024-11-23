@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.pojo.dto.ContractDTO;
 import com.company.pojo.entity.Contract;
 import com.company.pojo.entity.Result;
 import com.company.service.ContractsService;
@@ -39,10 +40,10 @@ public class ContractsController {
      * @return
      */
     @PostMapping("/create")
-    public Result add(@RequestBody Contract contracts){//传入json，参数名字和pojo相同
-        log.info("新增合同: {}" , contracts);
+    public Result add(@RequestBody ContractDTO contractsDTO){//传入json，参数名字和pojo相同
+        log.info("新增合同: {}" , contractsDTO);
         //调用service新增合同
-        contractsService.add(contracts);
+        contractsService.add(contractsDTO);
         return Result.success();
     }
 

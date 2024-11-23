@@ -19,11 +19,12 @@ public interface ShoppingCartMapper {
     List<ShoppingCart> list();
 
     /**
-     * 查询购物车所有信息
+     * 查询购物车指定信息
      * @return
      */
     @Select("select * from shopping_cart where shopping_cart_id = #{id}")
     ShoppingCart findById(Integer id);
+
 
     /**
      * 添加购物车内容

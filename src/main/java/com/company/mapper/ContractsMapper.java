@@ -20,6 +20,13 @@ public interface ContractsMapper {
     List<Contract> list();
 
     /**
+     * 找最新的一条合同
+     * @return
+     */
+    @Select("select * from contracts order by contract_id desc limit 1")
+    Contract findLatest();
+
+    /**
      * 新增合同
      * @param contract
      */

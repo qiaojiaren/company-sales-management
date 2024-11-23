@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.pojo.dto.ContractDTO;
 import com.company.pojo.entity.Contract;
 
 import java.util.List;
@@ -16,9 +17,9 @@ public interface ContractsService {
 
     /**
      * 新增合同
-     * @param contracts
+     * @param contractsDTO
      */
-    void add(Contract contracts);
+    void add(ContractDTO contractsDTO);
 
 
     /**

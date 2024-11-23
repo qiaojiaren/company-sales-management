@@ -5,10 +5,10 @@
 <mapper namespace="com.company.mapper.ContractsMapper">
 
     <insert id="insert">
-        insert into contracts ( customer_id, salesperson_id,contract_amount,
-                               contract_content, fulfillment_status, create_time, update_time)
-        VALUES(#{customerId},#{salespersonId},#{contractAmount},
-               #{contractContent},#{fulfillmentStatus},#{createTime},#{updateTime})
+        insert into contracts ( customer_id, salesperson_id,contract_amount,contract_content,
+                               description, fulfillment_status, create_time, update_time)
+        VALUES(#{customerId},#{salespersonId},#{contractAmount},#{contractContent},
+               #{description},#{fulfillmentStatus},#{createTime},#{updateTime})
     </insert>
     <!--批量删除员工 (1, 2, 3)-->
 <!--    <delete id="delete">
@@ -21,7 +21,7 @@
     </delete>    -->
 
     <!--条件查询-->
-<!--    <select id="list" resultType="com.company.pojo.Emp">
+<!--    <select id="list" resultType="com.company.pojo.">
         select *
         from emp
         <where>

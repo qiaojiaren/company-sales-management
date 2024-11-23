@@ -1,10 +1,17 @@
 package com.company.service.impl;
 
-import com.company.constant.Contract_status;
+import com.company.constant.ContractStatus;
+import com.company.constant.DeliveryStatus;
 import com.company.mapper.ContractsMapper;
+import com.company.mapper.DeliveryOrderMapper;
 import com.company.mapper.InventoryMapper;
+import com.company.mapper.ShoppingCartMapper;
+import com.company.pojo.dto.ContractDTO;
 import com.company.pojo.entity.Contract;
+import com.company.pojo.entity.DeliveryOrder;
+import com.company.pojo.entity.ShoppingCart;
 import com.company.service.ContractsService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +25,10 @@ public class ContractsServiceImpl implements ContractsService {
     private ContractsMapper contractsMapper;
 
     @Autowired
-    private InventoryMapper inventoryMapper;
+    private ShoppingCartMapper shoppingCartMapper;
 
+    @Autowired
+    private DeliveryOrderMapper deliveryOrderMapper;
 
     /**
      * 查询所有合同
@@ -32,22 +41,64 @@ public class ContractsServiceImpl implements ContractsService {
 
     /**
      * 创建新的合同
-     * @param contracts
+     * @param contractDTO
      */
     @Override
-    public void add(Contract contracts) {
+    public void add(ContractDTO contractDTO) {
 
-        Double amount;
-        amount = 10.0;
-        //todo:结合发货单进行操作
+        //将合同dto赋值给合同实体
+        Contract contract = new Contract();
+        BeanUtils.copyProperties(contractDTO,contract);
+
+        //将购物车里面的所有物品取出
+        List<ShoppingCart> shoppingCarts = shoppingCartMapper.list();
 
 
-        contracts.setContractAmount(amount);
-        contracts.setFulfillmentStatus(Contract_status.CONTRACT_NON_FULFILLMENT);
-        contracts.setCreateTime(LocalDateTime.now());
-        contracts.setUpdateTime(LocalDateTime.now());
+        Double amount = 0.0;
+        String content = "商品内容：";
 
-        contractsMapper.insert(contracts);
+        //计算购物车总金额，生成合同包含的商品内容
+        for(ShoppingCart shoppingCart : shoppingCarts){
+            amount += shoppingCart.getSellPrice();
+            content += shoppingCart.getProductName() + "*" + shoppingCart.getProductQuantity() + ", ";
+        }
+        //去掉最后的一个逗号
+        StringBuilder sb = new StringBuilder(content);
+        sb.setCharAt(sb.length()-2,' ');
+        content = sb.toString();
+
+        //填写合同实体类，准备写入到数据库
+        contract.setContractAmount(amount);
+        contract.setContractContent(content);
+        contract.setFulfillmentStatus(ContractStatus.CONTRACT_NON_FULFILLMENT);
+        contract.setCreateTime(LocalDateTime.now());
+        contract.setUpdateTime(LocalDateTime.now());
+
+        //调用mapper插入合同数据
+        contractsMapper.insert(contract);
+
+
+        //插入合同数据后，数据库会自动生成合同id，这时候将id取出，用于制作发货单
+        Contract contractLatest = new Contract();
+        contractLatest = contractsMapper.findLatest();
+        Integer contractId = contractLatest.getContractId();
+
+        //制作发货单
+        for(ShoppingCart shoppingCart : shoppingCarts){
+            DeliveryOrder deliveryOrder = new DeliveryOrder();
+            deliveryOrder.setContractId(contractId);
+            deliveryOrder.setProductId(shoppingCart.getProductId());
+            deliveryOrder.setProductInfo(shoppingCart.getProductName());
+            deliveryOrder.setLogisticsInfo(DeliveryStatus.NO_LOGISTICS);
+            deliveryOrder.setDeliveryStatus(DeliveryStatus.NON_DELIVERED);
+            deliveryOrder.setCreateTime(LocalDateTime.now());
+            deliveryOrder.setUpdateTime(LocalDateTime.now());
+
+            deliveryOrderMapper.insert(deliveryOrder);
+        }
+
+        //生成完所有进货单后，强制清空购物车
+        shoppingCartMapper.clean();
     }
 
     @Override
