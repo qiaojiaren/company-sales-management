@@ -14,11 +14,13 @@ import com.company.service.ContractsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class ContractsServiceImpl implements ContractsService {
 
     @Autowired
@@ -89,6 +91,7 @@ public class ContractsServiceImpl implements ContractsService {
             deliveryOrder.setContractId(contractId);
             deliveryOrder.setProductId(shoppingCart.getProductId());
             deliveryOrder.setProductInfo(shoppingCart.getProductName());
+            deliveryOrder.setProductQuantity(shoppingCart.getProductQuantity());
             deliveryOrder.setLogisticsInfo(DeliveryStatus.NO_LOGISTICS);
             deliveryOrder.setDeliveryStatus(DeliveryStatus.NON_DELIVERED);
             deliveryOrder.setCreateTime(LocalDateTime.now());
@@ -101,9 +104,26 @@ public class ContractsServiceImpl implements ContractsService {
         shoppingCartMapper.clean();
     }
 
+    /**
+     * 根据id删除
+     * @param contractId
+     */
     @Override
     public void delete(Integer contractId) {
         contractsMapper.deleteById(contractId);
+    }
+
+    /**
+     * 根据id履行合同
+     * @param contractId
+     */
+    @Override
+    public void fulfillment(Integer contractId) {
+        Contract contract = contractsMapper.findById(contractId);
+
+        contract.setFulfillmentStatus(ContractStatus.CONTRACT_FULFILLMENT);
+        contractsMapper.fulfillmentById(contract);
+
     }
 
 

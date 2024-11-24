@@ -16,5 +16,5 @@ public interface InventoryService {
      * @param id
      * @return
      */
-    Inventory getById(Integer id);
+    Inventory findById(Integer id);
 }

@@ -4,6 +4,7 @@ import com.company.pojo.entity.Contract;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public interface ContractsMapper {
      */
     @Select("select * from contracts")
     List<Contract> list();
+
+    @Select("select * from contracts where contract_id = #{contractId}")
+    Contract findById(Integer contractId);
 
     /**
      * 找最新的一条合同
@@ -41,4 +45,10 @@ public interface ContractsMapper {
     @Delete("delete from contracts where contract_id = #{contractId}")
     void deleteById(Integer contractId);
 
+    /**
+     * 根据id履行合同
+     * @param contract
+     */
+    @Update("update contracts set fulfillment_status = #{fulfillmentStatus} where contract_id = #{contractId}")
+    void fulfillmentById(Contract contract);
 }

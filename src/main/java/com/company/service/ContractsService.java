@@ -28,4 +28,9 @@ public interface ContractsService {
      */
     void delete(Integer contractId);
 
+    /**
+     * 履行合同
+     * @param contractId
+     */
+    void fulfillment(Integer contractId);
 }

@@ -5,10 +5,12 @@ import com.company.pojo.entity.Inventory;
 import com.company.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class InventoryServiceImpl implements InventoryService {
 
     @Autowired
@@ -29,7 +31,7 @@ public class InventoryServiceImpl implements InventoryService {
      * @return
      */
     @Override
-    public Inventory getById(Integer id) {
-        return inventoryMapper.getById(id);
+    public Inventory findById(Integer id) {
+        return inventoryMapper.findById(id);
     }
 }

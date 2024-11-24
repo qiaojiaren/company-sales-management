@@ -4,6 +4,7 @@ package com.company.mapper;
 import com.company.pojo.entity.Inventory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -24,7 +25,12 @@ public interface InventoryMapper {
      * @return
      */
     @Select("select * from inventory where product_id=#{id}")
-    Inventory getById(Integer id);
+    Inventory findById(Integer id);
 
-
+    /**
+     * 更新商品数量
+     * @param inventory
+     */
+    @Update("update inventory set quantity = #{quantity} where product_id = #{productId}")
+    void updateQuantity(Inventory inventory);
 }

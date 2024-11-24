@@ -1,4 +1,4 @@
-package com.company.pojo.entity;
+package com.company.pojo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * 发货单实体类
- */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class DeliveryOrder {
+public class DeliveryOrderDTO {
 
     //发货单id
     private Integer deliveryOrderId;
@@ -22,14 +16,11 @@ public class DeliveryOrder {
     //订单归属的合同的id
     private Integer contractId;
 
-    //商品id
+    //发货的商品id
     private Integer productId;
 
-    //商品信息
-    private String productInfo;
-
-    //商品数量
-    private Integer productQuantity;
+    //发货的商品名字
+    private Integer productInfo;
 
     //物流信息
     private String logisticsInfo;
@@ -40,10 +31,7 @@ public class DeliveryOrder {
     //备注
     private String comment;
 
-    //创建时间
-    private LocalDateTime createTime;
 
-    //更新时间
-    private LocalDateTime updateTime;
+
 
 }

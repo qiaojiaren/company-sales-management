@@ -5,13 +5,11 @@
 <mapper namespace="com.company.mapper.DeliveryOrderMapper">
 
     <insert id="insert">
-        insert into delivery_orders (contract_id,product_id,product_info,logistics_info,
-                                     delivery_status,create_time,update_time)
-        values (#{contractId},#{productId},#{productInfo},#{logisticsInfo},
-                #{deliveryStatus},#{createTime},#{updateTime})
+        insert into delivery_orders (contract_id,product_id,product_info,product_quantity,
+                                     logistics_info,comment,delivery_status,create_time,update_time)
+        values (#{contractId},#{productId},#{productInfo},#{productQuantity}
+                #{logisticsInfo},#{comment},#{deliveryStatus},#{createTime},#{updateTime})
     </insert>
-
-
 
 
 </mapper>

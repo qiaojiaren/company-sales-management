@@ -52,13 +52,26 @@ public class ContractsController {
      * 删除合同
      * @return
      */
-    @DeleteMapping("/delete/{contractId}")
-    public Result delete(@PathVariable Integer contractId){
+    @DeleteMapping("/delete")
+    public Result delete(Integer contractId){
         log.info("根据id删除合同:{}",contractId);
         //调用service删除合同
         contractsService.delete(contractId);
         return Result.success();
     }
 
+    /**
+     * 合同履行
+     * @param contractId
+     * @return
+     */
+    @PutMapping("/fulfillment")
+    public Result fulfillemnt(Integer contractId){
+
+        log.info("根据id履行合同：{}",contractId);
+
+        contractsService.fulfillment(contractId);
+        return Result.success();
+    }
 
 }

@@ -10,11 +10,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
@@ -44,7 +46,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         BeanUtils.copyProperties(shoppingCartDTO,shoppingCart);
 
-        Inventory inventory = inventoryMapper.getById(shoppingCart.getProductId());
+        Inventory inventory = inventoryMapper.findById(shoppingCart.getProductId());
         Double price = inventory.getSellPrice() * shoppingCart.getProductQuantity();
 
         shoppingCart.setProductName(inventory.getProductName());
@@ -76,7 +78,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart = shoppingCartMapper.findById(shoppingCartDTO.getShoppingCartId());
 
             //计算更改后价格
-            Inventory inventory = inventoryMapper.getById(shoppingCart.getProductId());
+            Inventory inventory = inventoryMapper.findById(shoppingCart.getProductId());
             Double price = inventory.getSellPrice() * (shoppingCart.getProductQuantity() -1 );
 
             //设置减一后的数量
@@ -104,7 +106,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart = shoppingCartMapper.findById(shoppingCartDTO.getShoppingCartId());
 
         //计算更改后价格
-        Inventory inventory = inventoryMapper.getById(shoppingCart.getProductId());
+        Inventory inventory = inventoryMapper.findById(shoppingCart.getProductId());
         Double price = inventory.getSellPrice() * (shoppingCart.getProductQuantity() + 1 );
 
         //设置加一后的数量
