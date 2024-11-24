@@ -74,4 +74,18 @@ public class ContractsController {
         return Result.success();
     }
 
+
+    /**
+     * 修改合同
+     * @param contract
+     * @return
+     */
+    @PutMapping("/modify")
+    public Result modify(@RequestBody Contract contract){
+
+        log.info("修改合同：{}",contract);
+
+        contractsService.modify(contract);
+        return Result.success();
+    }
 }

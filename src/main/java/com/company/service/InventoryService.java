@@ -1,6 +1,7 @@
 package com.company.service;
 
 import com.company.pojo.entity.Inventory;
+import com.company.pojo.entity.PurchaseOrder;
 
 import java.util.List;
 
@@ -17,4 +18,16 @@ public interface InventoryService {
      * @return
      */
     Inventory findById(Integer id);
+
+    /**
+     * 创造新的库存
+     */
+    void create(Inventory inventory);
+
+
+    /**
+     * 根据进货单id进货
+     * @param purchaseOrderId
+     */
+    void purchase(Integer purchaseOrderId);
 }

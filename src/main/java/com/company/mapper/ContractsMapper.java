@@ -51,4 +51,13 @@ public interface ContractsMapper {
      */
     @Update("update contracts set fulfillment_status = #{fulfillmentStatus} where contract_id = #{contractId}")
     void fulfillmentById(Contract contract);
+
+    /**
+     * 修改合同
+     */
+    @Update("update contracts set customer_id = #{customerId}, salesperson_id = #{salespersonId}," +
+            "contract_amount = #{contractAmount}, contract_content = #{contractContent}," +
+            "description = #{description}, fulfillment_status = #{fulfillmentStatus}," +
+            "update_time = #{updateTime} where contract_id = #{contractId}" )
+    void modifyById(Contract contract);
 }

@@ -33,4 +33,10 @@ public interface ContractsService {
      * @param contractId
      */
     void fulfillment(Integer contractId);
+
+    /**
+     * 修改合同
+     * @param contract
+     */
+    void modify(Contract contract);
 }

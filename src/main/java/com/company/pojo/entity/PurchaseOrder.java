@@ -19,11 +19,16 @@ public class PurchaseOrder {
     //进货商品id
     private Integer productId;
 
+    private String productName;
+
     //进货数量
     private Integer quantity;
 
     //采购总价
     private Double purchasePrice;
+
+    //履行状态
+    private String fulfillment;
 
     //描述
     private String descripiton;

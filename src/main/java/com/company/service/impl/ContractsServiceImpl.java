@@ -127,4 +127,19 @@ public class ContractsServiceImpl implements ContractsService {
     }
 
 
+
+
+    /**
+     * 修改合同
+     * @param contract
+     */
+    @Override
+    public void modify(Contract contract) {
+
+        contract.setUpdateTime(LocalDateTime.now());
+        contractsMapper.modifyById(contract);
+
+    }
+
+
 }
