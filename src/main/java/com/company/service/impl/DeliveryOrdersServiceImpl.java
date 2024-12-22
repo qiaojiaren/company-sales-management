@@ -7,17 +7,20 @@ import com.company.exception.InventoryNotEnoughException;
 import com.company.mapper.ContractsMapper;
 import com.company.mapper.DeliveryOrderMapper;
 import com.company.mapper.InventoryMapper;
+import com.company.mapper.PurchaseOrderMapper;
 import com.company.pojo.dto.DeliveryOrderDTO;
-import com.company.pojo.entity.Contract;
-import com.company.pojo.entity.DeliveryOrder;
-import com.company.pojo.entity.Inventory;
+import com.company.pojo.entity.*;
 import com.company.service.DeliveryOrdersService;
+import com.company.service.PurchaseOrderService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,12 +36,15 @@ public class DeliveryOrdersServiceImpl implements DeliveryOrdersService {
     @Autowired
     private ContractsMapper contractsMapper;
 
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
+
     /**
      * 订单发货
      * @param deliveryOrderDTO
      */
     @Override
-    public void deliver(DeliveryOrderDTO deliveryOrderDTO) {
+    public int deliver(DeliveryOrderDTO deliveryOrderDTO) {
 
         DeliveryOrder deliveryOrder = deliveryOrderMapper.findById(deliveryOrderDTO.getDeliveryOrderId());
         deliveryOrder.setLogisticsInfo(deliveryOrderDTO.getLogisticsInfo());
@@ -46,11 +52,15 @@ public class DeliveryOrdersServiceImpl implements DeliveryOrdersService {
 
         Inventory inventory = inventoryMapper.findById(deliveryOrder.getProductId());
 
+        int isEnough = 1;
+
         //判断商品充足和不足
         Integer quantity = inventory.getQuantity() - deliveryOrder.getProductQuantity();
         if(quantity >= 0){
-            if(quantity <= 5){
-                //警告
+            if(quantity <= inventory.getThreshold()){
+                //库存小于阈值，生成采购订单
+                purchaseOrderService.create(inventory.getProductId());
+                isEnough = 0;
             }
             inventory.setQuantity(quantity);
             inventoryMapper.updateQuantity(inventory);
@@ -60,8 +70,11 @@ public class DeliveryOrdersServiceImpl implements DeliveryOrdersService {
 
             deliveryOrderMapper.deliverById(deliveryOrder);
         }else{
+            //库存小于阈值，生成采购订单
+            purchaseOrderService.create(inventory.getProductId());
             //商品不足抛出异常
-            throw new InventoryNotEnoughException(MessageConstant.INVENTORY_NOT_ENOUGH);
+            isEnough = -1;
+            //throw new InventoryNotEnoughException(MessageConstant.INVENTORY_NOT_ENOUGH);
         }
 
         //将未履行的订单变成履行中
@@ -73,7 +86,14 @@ public class DeliveryOrdersServiceImpl implements DeliveryOrdersService {
             contractsMapper.fulfillmentById(contract);
         }
 
+        if(deliveryOrderMapper.findFinished(deliveryOrder.getContractId(),DeliveryStatus.NON_DELIVERED) == 0){
+            Contract contractFinish = new Contract();
+            contractFinish.setContractId(deliveryOrder.getContractId());
+            contractFinish.setFulfillmentStatus(ContractStatus.CONTRACT_FULFILLMENT);
+            contractsMapper.fulfillmentById(contractFinish);
+        }
 
+        return isEnough;
     }
 
     /**
@@ -81,8 +101,63 @@ public class DeliveryOrdersServiceImpl implements DeliveryOrdersService {
      * @return
      */
     @Override
-    public List<DeliveryOrder> findNotDelivery() {
+    public PageBean findNotDelivery(Integer id, Integer page, Integer size) {
+        PageHelper.startPage(page, size);
+        if(id == null) {
+            List<DeliveryOrder> deliveryOrders = deliveryOrderMapper.findNotDeliver(DeliveryStatus.NON_DELIVERED);
+            Page<DeliveryOrder> p = (Page<DeliveryOrder>) deliveryOrders;
+            long total = p.getTotal();
+            List<DeliveryOrder> list = p.getResult();
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(total);
+            pageBean.setRows(list);
+            return pageBean;
+        }
+        else{
+            DeliveryOrder deliveryOrder  = deliveryOrderMapper.listNotDeliver(DeliveryStatus.NON_DELIVERED,id);
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(1l); // 这里是1，因为只有一个
+            List<DeliveryOrder> deliveryOrders = new ArrayList<>();
+            deliveryOrders.add(deliveryOrder);
+            pageBean.setRows(deliveryOrders);
+            return pageBean;
+        }
+    }
 
-        return deliveryOrderMapper.findNotDeliver(DeliveryStatus.NON_DELIVERED);
+
+    /**
+     * 根据id查询发货单
+     * @param id
+     * @param page
+     * @param size
+     * @return
+     */
+    @Override
+    public PageBean list(Integer id, Integer page, Integer size) {
+        PageHelper.startPage(page, size);
+        if(id == null) {
+            List<DeliveryOrder> deliveryOrders = deliveryOrderMapper.list();
+            Page<DeliveryOrder> p = (Page<DeliveryOrder>) deliveryOrders;
+            long total = p.getTotal();
+            List<DeliveryOrder> list = p.getResult();
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(total);
+            pageBean.setRows(list);
+            return pageBean;
+        }
+        else{
+            DeliveryOrder deliveryOrder  = deliveryOrderMapper.findById(id);
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(1l); // 这里是1，因为只有一个
+            List<DeliveryOrder> deliveryOrders = new ArrayList<>();
+            deliveryOrders.add(deliveryOrder);
+            pageBean.setRows(deliveryOrders);
+            return pageBean;
+        }
+    }
+
+    @Override
+    public void modify(DeliveryOrder deliveryOrder) {
+        deliveryOrderMapper.update(deliveryOrder);
     }
 }

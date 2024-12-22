@@ -3,15 +3,19 @@ package com.company.service.impl;
 import com.company.constant.PurchaseOrderConstant;
 import com.company.mapper.InventoryMapper;
 import com.company.mapper.PurchaseOrderMapper;
+import com.company.pojo.entity.Contract;
 import com.company.pojo.entity.Inventory;
+import com.company.pojo.entity.PageBean;
 import com.company.pojo.entity.PurchaseOrder;
 import com.company.service.InventoryService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,8 +33,28 @@ public class InventoryServiceImpl implements InventoryService {
      * @return
      */
     @Override
-    public List<Inventory> list() {
-        return inventoryMapper.list();
+    public PageBean list(Integer id, Integer pageNum, Integer pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize);
+        if(id == null) {
+            List<Inventory> inventories = inventoryMapper.list();
+            Page<Inventory> p = (Page<Inventory>) inventories;
+            long total = p.getTotal();
+            List<Inventory> list = p.getResult();
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(total);
+            pageBean.setRows(list);
+            return pageBean;
+        }
+        else{
+            Inventory inventory = inventoryMapper.findById(id);
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(1l); // 这里是1，因为只有一个合同
+            List<Inventory> inventories = new ArrayList<>();
+            inventories.add(inventory);
+            pageBean.setRows(inventories);
+            return pageBean;
+        }
     }
 
     /**

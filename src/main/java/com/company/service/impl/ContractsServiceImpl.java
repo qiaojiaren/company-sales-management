@@ -4,19 +4,22 @@ import com.company.constant.ContractStatus;
 import com.company.constant.DeliveryStatus;
 import com.company.mapper.ContractsMapper;
 import com.company.mapper.DeliveryOrderMapper;
-import com.company.mapper.InventoryMapper;
 import com.company.mapper.ShoppingCartMapper;
 import com.company.pojo.dto.ContractDTO;
 import com.company.pojo.entity.Contract;
 import com.company.pojo.entity.DeliveryOrder;
+import com.company.pojo.entity.PageBean;
 import com.company.pojo.entity.ShoppingCart;
 import com.company.service.ContractsService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,8 +40,27 @@ public class ContractsServiceImpl implements ContractsService {
      * @return
      */
     @Override
-    public List<Contract> list() {
-        return contractsMapper.list();
+    public PageBean list(Integer id, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        if(id == null) {
+            List<Contract> contracts = contractsMapper.list();
+            Page<Contract> p = (Page<Contract>) contracts;
+            long total = p.getTotal();
+            List<Contract> list = p.getResult();
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(total);
+            pageBean.setRows(list);
+            return pageBean;
+        }
+        else{
+            Contract contract = contractsMapper.findById(id);
+            PageBean pageBean = new PageBean();
+            pageBean.setTotal(1l); // 这里是1，因为只有一个合同
+            List<Contract> contracts = new ArrayList<>();
+            contracts.add(contract);
+            pageBean.setRows(contracts);
+            return pageBean;
+        }
     }
 
     /**
@@ -134,10 +156,39 @@ public class ContractsServiceImpl implements ContractsService {
      * @param contract
      */
     @Override
-    public void modify(Contract contract) {
+    public boolean modify(Contract contract) {
 
-        contract.setUpdateTime(LocalDateTime.now());
-        contractsMapper.modifyById(contract);
+        //从数据库中查出原合同，判断是否可以修改
+        Contract contract1 = contractsMapper.findById(contract.getContractId());
+
+        if(contract1.getFulfillmentStatus().equals( ContractStatus.CONTRACT_NON_FULFILLMENT)){
+            contract.setUpdateTime(LocalDateTime.now());
+            contractsMapper.modifyById(contract);
+        }
+        else{
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 根据销售人员id查未履行合同
+     * @param salsepersonId
+     * @return
+     */
+    @Override
+    public PageBean unFulfillment(Integer salsepersonId, Integer pageNum, Integer pageSize) {
+
+        PageHelper.startPage(pageNum, pageSize);
+
+        List<Contract> contracts = contractsMapper.unFulfillment(salsepersonId,ContractStatus.CONTRACT_NON_FULFILLMENT);
+        Page<Contract> p = (Page<Contract>) contracts;
+        long total = p.getTotal();
+        List<Contract> list = p.getResult();
+        PageBean pageBean = new PageBean();
+        pageBean.setTotal(total);
+        pageBean.setRows(list);
+        return pageBean;
 
     }
 

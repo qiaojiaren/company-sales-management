@@ -1,6 +1,7 @@
 package com.company.service;
 
 import com.company.pojo.entity.Inventory;
+import com.company.pojo.entity.PageBean;
 import com.company.pojo.entity.PurchaseOrder;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface InventoryService {
     /**
      * 查询所有库存信息
      */
-    List<Inventory> list();
+    PageBean list(Integer id, Integer pageNum, Integer pageSize);
 
     /**
      * 根据id查询产品

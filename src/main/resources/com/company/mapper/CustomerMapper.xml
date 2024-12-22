@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mapper.CustomerMapper">
+
+    <insert id="insert">
+        insert into customers (customer_name, contact_number,
+                               address, create_time, update_time)
+        VALUES (#{customerName},#{contactNumber},#{address},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update">
+        update customers set customer_name = #{customerName}, contact_number = #{contactNumber},
+                             address = #{address}, update_time = #{updateTime}
+        where customer_id = #{customerId}
+    </update>
+
+</mapper>

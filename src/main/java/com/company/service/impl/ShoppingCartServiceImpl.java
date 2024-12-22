@@ -92,7 +92,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }else {
             shoppingCartMapper.deleteById(shoppingCartDTO.getShoppingCartId());
         }
-
     }
 
     /**

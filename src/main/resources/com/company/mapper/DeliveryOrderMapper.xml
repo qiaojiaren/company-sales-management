@@ -5,11 +5,45 @@
 <mapper namespace="com.company.mapper.DeliveryOrderMapper">
 
     <insert id="insert">
-        insert into delivery_orders (contract_id,product_id,product_info,product_quantity,
-                                     logistics_info,comment,delivery_status,create_time,update_time)
-        values (#{contractId},#{productId},#{productInfo},#{productQuantity}
-                #{logisticsInfo},#{comment},#{deliveryStatus},#{createTime},#{updateTime})
+        insert into delivery_orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractId != null">contract_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="productInfo != null">product_info,</if>
+            <if test="productQuantity != null">product_quantity,</if>
+            <if test="logisticsInfo != null">logistics_info,</if>
+            <if test="comment != null">comment,</if>
+            <if test="deliveryStatus != null">delivery_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractId != null">#{contractId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="productInfo != null">#{productInfo},</if>
+            <if test="productQuantity != null">#{productQuantity},</if>
+            <if test="logisticsInfo != null">#{logisticsInfo},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="deliveryStatus != null">#{deliveryStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
     </insert>
+
+    <update id="update">
+        update delivery_orders
+        <set>
+            <if test="contractId != null">contract_id = #{contractId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productInfo != null">product_info = #{productInfo},</if>
+            <if test="productQuantity != null">product_quantity = #{productQuantity},</if>
+            <if test="logisticsInfo != null">logistics_info = #{logisticsInfo},</if>
+            <if test="comment != null">comment = #{comment},</if>
+            <if test="deliveryStatus != null">delivery_status = #{deliveryStatus},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where delivery_order_id = #{deliveryOrderId}
+    </update>
 
 
 </mapper>

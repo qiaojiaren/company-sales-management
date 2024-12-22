@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mapper.SalespersonMapper">
+
+    <insert id="insert">
+        insert into salespersons(salesperson_name, contact_number,is_manager,
+                                 username,password,create_time,update_time)
+        VALUES (#{salespersonName},#{contactNumber},#{isManager},
+                #{username},#{password},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update">
+        update salespersons set salesperson_name = #{salespersonName}, contact_number = #{contactNumber},is_manager = #{isManager},
+                                username = #{username}, password = #{password},update_time = #{updateTime}
+        where salesperson_id = #{salespersonId}
+    </update>
+
+</mapper>

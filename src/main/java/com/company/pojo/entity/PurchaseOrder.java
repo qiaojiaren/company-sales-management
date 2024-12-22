@@ -31,7 +31,7 @@ public class PurchaseOrder {
     private String fulfillment;
 
     //描述
-    private String descripiton;
+    private String description;
 
     private LocalDateTime createTime;
 

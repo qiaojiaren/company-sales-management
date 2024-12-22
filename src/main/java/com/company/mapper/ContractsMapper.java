@@ -52,6 +52,7 @@ public interface ContractsMapper {
     @Update("update contracts set fulfillment_status = #{fulfillmentStatus} where contract_id = #{contractId}")
     void fulfillmentById(Contract contract);
 
+
     /**
      * 修改合同
      */
@@ -60,4 +61,12 @@ public interface ContractsMapper {
             "description = #{description}, fulfillment_status = #{fulfillmentStatus}," +
             "update_time = #{updateTime} where contract_id = #{contractId}" )
     void modifyById(Contract contract);
+
+    /**
+     * 根据销售人员id查未履行合同
+     * @param salespersonId
+     * @return
+     */
+    @Select("select * from contracts where salesperson_id = #{salespersonId} and fulfillment_status = #{unFulfill}")
+    List<Contract> unFulfillment(Integer salespersonId,String unFulfill);
 }

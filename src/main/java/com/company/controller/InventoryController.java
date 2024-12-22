@@ -2,6 +2,7 @@ package com.company.controller;
 
 
 import com.company.pojo.entity.Inventory;
+import com.company.pojo.entity.PageBean;
 import com.company.pojo.entity.PurchaseOrder;
 import com.company.pojo.entity.Result;
 import com.company.service.InventoryService;
@@ -25,11 +26,14 @@ public class InventoryController {
      * @return
      */
     @GetMapping("/search")
-    public Result list(){
+    public Result list(@RequestParam(value = "query",required = false) Integer id,
+                       @RequestParam(value = "pagenum",required = false) Integer page,
+                       @RequestParam(value = "pagesize",required = false) Integer size){
         log.info("开始查询所有库存信息");
-        List<Inventory> inventoryList = inventoryService.list();
+        PageBean inventoryList = inventoryService.list(id,page,size);
         return Result.success(inventoryList);
     }
+
 
     /**
      * 创建新的库存
@@ -49,8 +53,8 @@ public class InventoryController {
      * 采购进货
      * @return
      */
-    @PutMapping("/purchase")
-    public Result purchase(Integer purchaseOrderId){
+    @PutMapping("/purchase/{id}")
+    public Result purchase(@PathVariable("id") Integer purchaseOrderId){
 
         log.info("根据进货单进货：{}",purchaseOrderId);
 

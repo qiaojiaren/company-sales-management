@@ -2,6 +2,7 @@ package com.company.service;
 
 import com.company.pojo.dto.ContractDTO;
 import com.company.pojo.entity.Contract;
+import com.company.pojo.entity.PageBean;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface ContractsService {
      * 查询全部合同信息
      * @return
      */
-    List<Contract> list();
+    PageBean list(Integer id, Integer pageNum, Integer pageSize);
 
     /**
      * 新增合同
@@ -38,5 +39,12 @@ public interface ContractsService {
      * 修改合同
      * @param contract
      */
-    void modify(Contract contract);
+    boolean modify(Contract contract);
+
+    /**
+     * 根据销售人员id查未履行合同
+     * @param salsepersonId
+     * @return
+     */
+    PageBean unFulfillment(Integer salsepersonId,Integer pageNum, Integer pageSize);
 }

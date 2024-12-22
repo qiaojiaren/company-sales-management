@@ -1,13 +1,12 @@
 package com.company.controller;
 
+import com.company.pojo.entity.PageBean;
+import com.company.pojo.entity.PurchaseOrder;
 import com.company.pojo.entity.Result;
 import com.company.service.PurchaseOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequestMapping("/purchaseOrder")
@@ -30,4 +29,27 @@ public class PurchaseOrderController {
 
         return Result.success();
     }
+
+    /**
+     * 查询采购单列表  数据
+     * @return
+     */
+    @GetMapping("/search")
+    public Result list(@RequestParam(value = "query",required = false) Integer id,
+                       @RequestParam(value = "pagenum",required = false) Integer page,
+                       @RequestParam(value = "pagesize",required = false) Integer size){
+        log.info("查询合同数据");
+        //调用service查询合同数据
+        PageBean  purchaseOrderList = purchaseOrderService.list(id,page,size);
+        return Result.success(purchaseOrderList);
+    }
+
+    @PutMapping("/modify")
+    public Result modify(@RequestBody PurchaseOrder purchaseOrder){
+        log.info("修改采购单{}", purchaseOrder);
+        purchaseOrderService.modify(purchaseOrder);
+        return Result.success();
+    }
+
+
 }

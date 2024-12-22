@@ -20,7 +20,7 @@ public class DeliveryOrderDTO {
     private Integer productId;
 
     //发货的商品名字
-    private Integer productInfo;
+    private String productInfo;
 
     //物流信息
     private String logisticsInfo;
@@ -30,8 +30,5 @@ public class DeliveryOrderDTO {
 
     //备注
     private String comment;
-
-
-
 
 }

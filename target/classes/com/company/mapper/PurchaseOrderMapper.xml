@@ -8,6 +8,20 @@
         insert into purchase_orders ( product_id, product_name,quantity,purchase_price,
                                      fulfillment,description, create_time, update_time)
         values (#{productId},#{productName},#{quantity},#{purchasePrice},
-                #{fulfillment},#{descripiton},#{createTime},#{updateTime})
+                #{fulfillment},#{description},#{createTime},#{updateTime})
     </insert>
+
+    <update id="update">
+        UPDATE purchase_orders
+        SET
+            product_id = COALESCE(#{productId}, product_id),
+            product_name = COALESCE(#{productName}, product_name),
+            quantity = COALESCE(#{quantity}, quantity),
+            purchase_price = COALESCE(#{purchasePrice}, purchase_price),
+            fulfillment = COALESCE(#{fulfillment}, fulfillment),
+            description = COALESCE(#{description}, description),
+            update_time = #{updateTime}
+        WHERE purchase_order_id = #{purchaseOrderId}
+    </update>
+
 </mapper>
